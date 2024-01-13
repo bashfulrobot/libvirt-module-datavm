@@ -58,6 +58,7 @@ runcmd:
   - [ bash, -c, 'echo "Running: echo \"LABEL=data /data ext4 defaults 0 0\" >> /etc/fstab" >> /home/${var.admin_name}/cloud-init-run.log; echo "LABEL=data /data ext4 defaults 0 0" >> /etc/fstab' ]
   - [ bash, -c, 'start_time=$(TZ=":America/Vancouver" date "+%Y-%m-%d %H:%M:%S.%N %Z"); echo "Running Wget - install-worker.sh: $start_time" >> /home/${var.admin_name}/cloud-init-run.log' ]
   - [ bash, -c, 'wget -P /tmp https://raw.githubusercontent.com/bashfulrobot/libvirt-module-helpers/main/install-worker.sh >> /home/${var.admin_name}/cloud-init-run.log 2>&1' ]
+  - [ bash, -c, 'chmod +x /tmp/install-worker.sh >> /home/${var.admin_name}/cloud-init-run.log 2>&1' ]
   - [ bash, -c, 'echo "Cloud-init end: $(TZ=":America/Vancouver" date "+%Y-%m-%d %H:%M:%S.%N %Z")" >> /home/${var.admin_name}/cloud-init-run.log' ]
 EOF
 }
