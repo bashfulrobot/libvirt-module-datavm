@@ -7,21 +7,6 @@ locals {
   ]
 }
 
-# resource "null_resource" "copy_files" {
-#   for_each = { for node in local.vm_nodes : node.name => node }
-
-#   provisioner "file" {
-#     source      = "${path.module}/../helpers/install-worker.sh"
-#     destination = "/tmp/install-worker.sh"
-
-#     connection {
-#       type        = "ssh"
-#       user        = var.admin_name
-#       private_key = file("~/.ssh/id_ed25519_np")
-#       host        = each.value.address
-#     }
-#   }
-# }
 # create a cloud-init cloud-config.
 # NB this creates an iso image that will be used by the NoCloud cloud-init datasource.
 # see https://github.com/dmacvicar/terraform-provider-libvirt/blob/v0.7.1/website/docs/r/cloudinit.html.markdown
@@ -63,9 +48,6 @@ runcmd:
   - [ bash, -c, 'echo "Running: mkdir -p /data" >> /home/${var.admin_name}/cloud-init-run.log; mkdir -p /data >> /home/${var.admin_name}/cloud-init-run.log 2>&1' ]
   - [ bash, -c, 'echo "Running: mount LABEL=data /data" >> /home/${var.admin_name}/cloud-init-run.log; mount LABEL=data /data >> /home/${var.admin_name}/cloud-init-run.log 2>&1' ]
   - [ bash, -c, 'echo "Running: echo \"LABEL=data /data ext4 defaults 0 0\" >> /etc/fstab" >> /home/${var.admin_name}/cloud-init-run.log; echo "LABEL=data /data ext4 defaults 0 0" >> /etc/fstab' ]
-  - [ bash, -c, 'start_time=$(TZ=":America/Vancouver" date "+%Y-%m-%d %H:%M:%S.%N %Z"); echo "Running Wget - install-worker.sh: $start_time" >> /home/${var.admin_name}/cloud-init-run.log' ]
-  - [ bash, -c, 'wget -P /tmp https://raw.githubusercontent.com/bashfulrobot/libvirt-module-helpers/main/install-worker.sh >> /home/${var.admin_name}/cloud-init-run.log 2>&1' ]
-  - [ bash, -c, 'chmod +x /tmp/install-worker.sh >> /home/${var.admin_name}/cloud-init-run.log 2>&1' ]
   - [ bash, -c, 'echo "Cloud-init end: $(TZ=":America/Vancouver" date "+%Y-%m-%d %H:%M:%S.%N %Z")" >> /home/${var.admin_name}/cloud-init-run.log' ]
 EOF
 }
