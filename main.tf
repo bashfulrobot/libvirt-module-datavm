@@ -41,6 +41,7 @@ users:
       - ${jsonencode(trimspace(file("${var.path_to_ssh_public_key}")))}
 ssh_pwauth: True
 runcmd:
+  - [ bash -c, 'apt update; apt install traceroute -y']
   - [ bash, -c, 'echo "Cloud-init start: $(TZ=":America/Vancouver" date "+%Y-%m-%d %H:%M:%S.%N %Z")" >> /home/${var.admin_name}/cloud-init-run.log' ]
   - [ bash, -c, 'echo "Running: parted /dev/vdb --script -- mklabel gpt mkpart primary ext4 0% 100%" >> /home/${var.admin_name}/cloud-init-run.log; parted /dev/vdb --script -- mklabel gpt mkpart primary ext4 0% 100% >> /home/${var.admin_name}/cloud-init-run.log 2>&1' ]
   - [ bash, -c, 'echo "Running: lsblk -f /dev/vdb1 --output FSTYPE" >> /home/${var.admin_name}/cloud-init-run.log; lsblk -f /dev/vdb1 --output FSTYPE | grep -q "^$" && echo "Running: mkfs.ext4 /dev/vdb1" >> /home/${var.admin_name}/cloud-init-run.log; mkfs.ext4 /dev/vdb1 >> /home/${var.admin_name}/cloud-init-run.log 2>&1' ]
